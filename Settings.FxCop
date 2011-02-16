@@ -47,24 +47,29 @@
       <Namespaces>
        <Namespace Name="ObjectDumper">
         <Types>
+         <Type Name="DebugWriter">
+          <Members>
+           <Member Name="#.ctor()">
+            <Messages>
+             <Message Id="System.IO.TextWriter.#ctor" TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305" Created="2011-02-16 19:21:27Z">
+              <Issue Name="IFormatProviderAlternate">
+               <Item>'TextWriter.TextWriter()'</Item>
+               <Item>'DebugWriter.DebugWriter()'</Item>
+               <Item>'TextWriter.TextWriter(IFormatProvider)'</Item>
+               <Item>'CultureInfo.CurrentCulture'</Item>
+               <Item>'CultureInfo.InvariantCulture'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
          <Type Name="ObjectDumperExtensions">
           <Members>
            <Member Name="#Dump`1(!!0,System.IO.TextWriter,System.String)">
             <Messages>
              <Message TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026" Created="2011-02-16 18:25:22Z">
               <Issue>
-               <Item>'ObjectDumperExtensions.Dump&lt;T&gt;(this T, TextWriter, string)'</Item>
-              </Issue>
-             </Message>
-             <Message Id="name" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-02-16 18:25:22Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'name'</Item>
-               <Item>'ObjectDumperExtensions.Dump&lt;T&gt;(this T, TextWriter, string)'</Item>
-              </Issue>
-             </Message>
-             <Message Id="writer" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-02-16 18:25:22Z" FixCategory="DependsOnFix">
-              <Issue>
-               <Item>'writer'</Item>
                <Item>'ObjectDumperExtensions.Dump&lt;T&gt;(this T, TextWriter, string)'</Item>
               </Issue>
              </Message>
@@ -130,6 +135,9 @@
    </Rule>
    <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
     <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
+   </Rule>
+   <Rule TypeName="SpecifyIFormatProvider" Category="Microsoft.Globalization" CheckId="CA1305">
+    <Resolution Name="IFormatProviderAlternate">Because the behavior of {0} could vary based on the current user's locale settings, replace this call in {1} with a call to {2}. If the result of {2} will be based on input from the user, specify {3} as the 'IFormatProvider' parameter. Otherwise, if the result will based on input stored and accessed by software, such as when it is loaded from disk or from a database, specify {4}.</Resolution>
    </Rule>
   </Rules>
  </FxCopReport>

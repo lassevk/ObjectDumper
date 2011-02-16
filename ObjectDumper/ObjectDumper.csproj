@@ -42,8 +42,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DebugWriter.cs" />
     <Compile Include="ObjectDumperExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringEx.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\ObjectDumper.snk">

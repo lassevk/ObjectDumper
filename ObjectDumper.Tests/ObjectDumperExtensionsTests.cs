@@ -27,9 +27,19 @@ namespace ObjectDumper.Tests
         public void DumpToDebug_ReturnsSameInstancePassedToIt()
         {
             var obj = new object();
-            object output = obj.Dump();
+            object output = obj.Dump("name");
 
             Assert.That(output, Is.SameAs(obj));
+        }
+
+        [TestCase((string)null)]
+        [TestCase("")]
+        [TestCase(" \t\r\n ")]
+        public void DumpToDebug_NullOrEmptyName_ThrowsArgumentNullException(string name)
+        {
+            var obj = new object();
+
+            Assert.Throws<ArgumentNullException>(() => obj.Dump(name));
         }
 
         [Test]

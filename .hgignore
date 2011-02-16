@@ -1,0 +1,6 @@
+glob:_ReSharper.*/
+glob:[Bb]in/
+glob:[Oo]bj/
+glob:*.suo
+glob:*.[Cc]ache
+glob:*.user

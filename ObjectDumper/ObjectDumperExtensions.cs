@@ -85,12 +85,12 @@ namespace ObjectDumper
         /// <param name="value">
         /// The object to dump.
         /// </param>
-        /// <param name="filename">
-        /// The full path to and name of the file to dump the object contents to.
-        /// </param>
         /// <param name="name">
         /// The name to give to the object in the dump;
         /// or <c>null</c> to use a generated name.
+        /// </param>
+        /// <param name="filename">
+        /// The full path to and name of the file to dump the object contents to.
         /// </param>
         /// <param name="encoding">
         /// The <see cref="Encoding"/> to use for the file.
@@ -105,7 +105,7 @@ namespace ObjectDumper
         /// <para>- or -</para>
         /// <para><paramref name="encoding"/> is <c>null</c></para>
         /// </exception>
-        public static T Dump<T>(this T value, string name, string filename, Encoding encoding = null)
+        public static T Dump<T>(this T value, string name, string filename, Encoding encoding)
         {
             if (StringEx.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");
@@ -130,12 +130,12 @@ namespace ObjectDumper
         /// <param name="value">
         /// The object to dump.
         /// </param>
-        /// <param name="writer">
-        /// The <see cref="TextWriter"/> to dump the object contents to.
-        /// </param>
         /// <param name="name">
         /// The name to give to the object in the dump;
         /// or <c>null</c> to use a generated name.
+        /// </param>
+        /// <param name="writer">
+        /// The <see cref="TextWriter"/> to dump the object contents to.
         /// </param>
         /// <returns>
         /// The <paramref name="value"/>, to facilitate easy usage in expressions and method calls.
@@ -152,7 +152,7 @@ namespace ObjectDumper
             if (writer == null)
                 throw new ArgumentNullException("writer");
 
-            writer.WriteLine("{0} = {1}", name, value);
+            Dumper.Dump(value, name, writer);
 
             return value;
         }

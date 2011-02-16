@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="10.0" Name="My FxCop Project">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False">$(FxCopDir)\Xml\FxCopReport.xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded, Good, Noise" NewOnly="False" />
+   <Report Status="Active, Good, Noise" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+  <Spelling Locale="en-US" />
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+  <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
+  <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
+ </ProjectOptions>
+ <Targets>
+  <Target Name="$(ProjectDir)/ObjectDumper/bin/Debug/ObjectDumper.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityTransparencyRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="10.0">
+  <Targets>
+   <Target Name="$(ProjectDir)/ObjectDumper/bin/Debug/ObjectDumper.dll">
+    <Modules>
+     <Module Name="objectdumper.dll">
+      <Namespaces>
+       <Namespace Name="ObjectDumper">
+        <Types>
+         <Type Name="ObjectDumperExtensions">
+          <Members>
+           <Member Name="#Dump`1(!!0,System.IO.TextWriter,System.String)">
+            <Messages>
+             <Message TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026" Created="2011-02-16 18:25:22Z">
+              <Issue>
+               <Item>'ObjectDumperExtensions.Dump&lt;T&gt;(this T, TextWriter, string)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="name" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-02-16 18:25:22Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'name'</Item>
+               <Item>'ObjectDumperExtensions.Dump&lt;T&gt;(this T, TextWriter, string)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="writer" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-02-16 18:25:22Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'writer'</Item>
+               <Item>'ObjectDumperExtensions.Dump&lt;T&gt;(this T, TextWriter, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Dump`1(!!0,System.String)">
+            <Messages>
+             <Message TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026" Created="2011-02-16 18:25:22Z">
+              <Issue>
+               <Item>'ObjectDumperExtensions.Dump&lt;T&gt;(this T, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Dump`1(!!0,System.String,System.String,System.Text.Encoding)">
+            <Messages>
+             <Message TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026" Created="2011-02-16 18:25:22Z">
+              <Issue>
+               <Item>'ObjectDumperExtensions.Dump&lt;T&gt;(this T, string, string, Encoding)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="encoding" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-02-16 18:25:22Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'encoding'</Item>
+               <Item>'ObjectDumperExtensions.Dump&lt;T&gt;(this T, string, string, Encoding)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="filename" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-02-16 18:26:03Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'filename'</Item>
+               <Item>'ObjectDumperExtensions.Dump&lt;T&gt;(this T, string, string, Encoding)'</Item>
+              </Issue>
+             </Message>
+             <Message Id="name" TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801" Created="2011-02-16 18:25:22Z" FixCategory="DependsOnFix">
+              <Issue>
+               <Item>'name'</Item>
+               <Item>'ObjectDumperExtensions.Dump&lt;T&gt;(this T, string, string, Encoding)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#DumpToString`1(!!0,System.String)">
+            <Messages>
+             <Message TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026" Created="2011-02-16 18:25:22Z">
+              <Issue>
+               <Item>'ObjectDumperExtensions.DumpToString&lt;T&gt;(this T, string)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Rules>
+   <Rule TypeName="DefaultParametersShouldNotBeUsed" Category="Microsoft.Design" CheckId="CA1026">
+    <Resolution Name="Default">Replace method {0} with an overload that supplies all default arguments.</Resolution>
+   </Rule>
+   <Rule TypeName="ReviewUnusedParameters" Category="Microsoft.Usage" CheckId="CA1801">
+    <Resolution Name="Default">Parameter {0} of {1} is never used. Remove the parameter or use it in the method body.</Resolution>
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>

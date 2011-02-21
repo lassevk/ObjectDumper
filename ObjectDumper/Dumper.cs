@@ -95,7 +95,7 @@ namespace ObjectDumper
                     formattedValue = string.Format(CultureInfo.InvariantCulture, "\"{0}\"", formattedValue);
                 if (length > 80)
                     formattedValue += " (+" + (length - 80) + " chars)";
-                formattedValue = "= " + formattedValue;
+                formattedValue = " = " + formattedValue;
             }
 
             writer.WriteLine("{0}{1}{2}{3} [{4}]{5}", indentation, keyPrefix, name, formattedValue, value.GetType(), keyRef);

@@ -48,7 +48,20 @@
         <WRAP_LIMIT>160</WRAP_LIMIT>
         <WRAP_LINES>False</WRAP_LINES>
       </FormatSettings>
-      <UsingsSettings />
+      <UsingsSettings>
+        <KeepImports IsNull="False">
+          <Item>System</Item>
+          <Item>System.Diagnostics</Item>
+          <Item>System.Collections.Generic</Item>
+          <Item>System.Linq</Item>
+        </KeepImports>
+        <MandatoryImports IsNull="False">
+          <Item>System</Item>
+          <Item>System.Diagnostics</Item>
+          <Item>System.Collections.Generic</Item>
+          <Item>System.Linq</Item>
+        </MandatoryImports>
+      </UsingsSettings>
       <Naming2>
         <EventHandlerPatternLong>$object$_On$event$</EventHandlerPatternLong>
         <EventHandlerPatternShort>$event$Handler</EventHandlerPatternShort>
@@ -120,8 +133,6 @@
       <PredefinedRule Inspect="True" Prefix="" Suffix="" Style="AaBb" ElementKind="Other" />
       <Abbreviation Text="URL" />
       <Abbreviation Text="XHTML" />
-      <Abbreviation Text="DAV" />
-      <Abbreviation Text="GET" />
     </Naming2>
   </CodeStyleSettings>
   <SharedSolutionTemplateManager>

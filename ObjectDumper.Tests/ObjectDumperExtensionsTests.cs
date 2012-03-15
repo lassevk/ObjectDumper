@@ -57,5 +57,19 @@ namespace ObjectDumper.Tests
 
             Assert.That(listener.Output.ToString(), Is.StringContaining(name));
         }
+
+        [Test]
+        public void PointersDoNotCauseNotCauseEndlessRecursion()
+        {
+            var obj = new EncoderExceptionFallbackBuffer();
+            obj.Dump("buffer");
+        }
+
+        [Test]
+        public void DelegatesDoesNotCauseEndlessRecursion()
+        {
+            Action obj = Console.WriteLine;
+            obj.Dump("action");
+        }
     }
 }

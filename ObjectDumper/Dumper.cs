@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
+using System.Runtime.Remoting;
 
 namespace ObjectDumper
 {
@@ -38,11 +38,11 @@ namespace ObjectDumper
             if (writer == null)
                 throw new ArgumentNullException("writer");
 
-            var lookup = new Dictionary<object, int>();
-            InternalDump(0, name, value, writer, lookup, true);
+            var idGenerator = new ObjectIDGenerator();
+            InternalDump(0, name, value, writer, idGenerator, true);
         }
 
-        private static void InternalDump(int indentationLevel, string name, object value, TextWriter writer, Dictionary<object, int> lookup, bool recursiveDump)
+        private static void InternalDump(int indentationLevel, string name, object value, TextWriter writer, ObjectIDGenerator idGenerator, bool recursiveDump)
         {
             var indentation = new string(' ', indentationLevel * 3);
 
@@ -57,15 +57,14 @@ namespace ObjectDumper
             // figure out if this is an object that has already been dumped, or is currently being dumped
             string keyRef = string.Empty;
             string keyPrefix = string.Empty;
-            int key;
             if (!type.IsValueType)
             {
-                if (lookup.TryGetValue(value, out key))
+                bool firstTime;
+                long key = idGenerator.GetId(value, out firstTime);
+                if (!firstTime)
                     keyRef = string.Format(CultureInfo.InvariantCulture, " (see #{0})", key);
                 else
                 {
-                    key = lookup.Count + 1;
-                    lookup[value] = key;
                     keyPrefix = string.Format(CultureInfo.InvariantCulture, "#{0}: ", key);
                 }
             }
@@ -113,6 +112,13 @@ namespace ObjectDumper
             if (type.IsValueType && type.FullName == "System." + type.Name)
                 return;
 
+            // Avoid certain types that will result in endless recursion
+            if (type.FullName == "System.Reflection." + type.Name)
+                return;
+
+            if (value is System.Security.Principal.SecurityIdentifier)
+                return;
+
             if (!recursiveDump)
                 return;
 
@@ -135,11 +141,19 @@ namespace ObjectDumper
                     try
                     {
                         object propertyValue = pi.GetValue(value, null);
-                        InternalDump(indentationLevel + 2, pi.Name, propertyValue, writer, lookup, true);
+                        InternalDump(indentationLevel + 2, pi.Name, propertyValue, writer, idGenerator, true);
                     }
                     catch (TargetInvocationException ex)
                     {
-                        InternalDump(indentationLevel + 2, pi.Name, ex, writer, lookup, false);
+                        InternalDump(indentationLevel + 2, pi.Name, ex, writer, idGenerator, false);
+                    }
+                    catch (ArgumentException ex)
+                    {
+                        InternalDump(indentationLevel + 2, pi.Name, ex, writer, idGenerator, false);
+                    }
+                    catch (RemotingException ex)
+                    {
+                        InternalDump(indentationLevel + 2, pi.Name, ex, writer, idGenerator, false);
                     }
                 }
                 writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}   }}", indentation));
@@ -152,11 +166,11 @@ namespace ObjectDumper
                     try
                     {
                         object fieldValue = field.GetValue(value);
-                        InternalDump(indentationLevel + 2, field.Name, fieldValue, writer, lookup, true);
+                        InternalDump(indentationLevel + 2, field.Name, fieldValue, writer, idGenerator, true);
                     }
                     catch (TargetInvocationException ex)
                     {
-                        InternalDump(indentationLevel + 2, field.Name, ex, writer, lookup, false);
+                        InternalDump(indentationLevel + 2, field.Name, ex, writer, idGenerator, false);
                     }
                 }
                 writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}   }}", indentation));

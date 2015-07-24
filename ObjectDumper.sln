@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectDumper", "ObjectDumper\ObjectDumper.csproj", "{3FDF28DE-BFCF-439A-9430-0D564F1E6EC8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectDumper", "src\ObjectDumper\ObjectDumper.csproj", "{3FDF28DE-BFCF-439A-9430-0D564F1E6EC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectDumper.Tests", "ObjectDumper.Tests\ObjectDumper.Tests.csproj", "{7329E7DF-3D07-47C8-9E3F-FC0EE9E878D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObjectDumper.Tests", "tests\ObjectDumper.Tests\ObjectDumper.Tests.csproj", "{7329E7DF-3D07-47C8-9E3F-FC0EE9E878D1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0CEC06BB-FD37-4DA8-AD68-51FC7F1151D9}"
 	ProjectSection(SolutionItems) = preProject

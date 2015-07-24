@@ -4,3 +4,4 @@ glob:[Oo]bj/
 glob:*.suo
 glob:*.[Cc]ache
 glob:*.user
+glob:packages

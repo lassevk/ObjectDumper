@@ -35,7 +35,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\Lasse V. Karlsen.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\ObjectDumper.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseBinaries|AnyCPU'">
     <OutputPath>bin\ReleaseBinaries\</OutputPath>
@@ -58,8 +58,8 @@
     <Compile Include="StringEx.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Lasse V. Karlsen.snk">
-      <Link>Lasse V. Karlsen.snk</Link>
+    <None Include="..\..\ObjectDumper.snk">
+      <Link>ObjectDumper.snk</Link>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

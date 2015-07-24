@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
-using NUnit.Framework;
+using Xunit;
 
 namespace ObjectDumper.Tests
 {
-    [TestFixture]
+
     public class ObjectDumperExtensionsTests
     {
-        public class Listener : TraceListener
+
+
+		public class Listener : TraceListener
         {
             public readonly StringBuilder Output = new StringBuilder();
 
@@ -25,18 +29,18 @@ namespace ObjectDumper.Tests
             }
         }
 
-        [Test]
+        [Fact]
         public void DumpToDebug_ReturnsSameInstancePassedToIt()
         {
             var obj = new object();
             object output = obj.Dump("name");
 
-            Assert.That(output, Is.SameAs(obj));
+            Assert.Equal(output, obj);
         }
-
-        [TestCase((string)null)]
-        [TestCase("")]
-        [TestCase(" \t\r\n ")]
+		[Theory]
+		[InlineData((string)null)]
+		[InlineData("")]
+		[InlineData(" \t\r\n ")]
         public void DumpToDebug_NullOrEmptyName_ThrowsArgumentNullException(string name)
         {
             var obj = new object();
@@ -44,7 +48,7 @@ namespace ObjectDumper.Tests
             Assert.Throws<ArgumentNullException>(() => obj.Dump(name));
         }
 
-        [Test]
+        [Fact]
         public void DumpToDebug_OutputsToDebug()
         {
             var obj = new object();
@@ -55,21 +59,74 @@ namespace ObjectDumper.Tests
             obj.Dump(name);
             Debug.Listeners.Remove(listener);
 
-            Assert.That(listener.Output.ToString(), Is.StringContaining(name));
+            Assert.Contains(name,listener.Output.ToString() );
         }
 
-        [Test]
+        [Fact]
         public void PointersDoNotCauseNotCauseEndlessRecursion()
         {
             var obj = new EncoderExceptionFallbackBuffer();
             obj.Dump("buffer");
         }
 
-        [Test]
+        [Fact]
         public void DelegatesDoesNotCauseEndlessRecursion()
         {
             Action obj = Console.WriteLine;
             obj.Dump("action");
         }
-    }
+
+		[Fact]
+		public void DumpToString_innerException()
+		{
+			try
+			{
+				throw new ApplicationException("1");
+			}
+			catch (Exception e1)
+			{
+				try
+				{
+					throw new ApplicationException("2", e1);
+				}
+				catch (Exception e2)
+				{
+					try
+					{
+						throw new ApplicationException("3", e2);
+					}
+					catch (Exception e3)
+					{
+						var result = e1.DumpToString("test");
+						Assert.Contains("1", result);
+						Assert.Contains("2", result);
+						Assert.Contains("3", result);
+					}
+				}
+			}
+		}
+
+		[Fact]
+		public void DumpToSting_allDepth()
+		{
+			var result = Node.Root.DumpToString( "root");
+			Assert.Contains("left sub-tree", result);
+			Assert.Contains("left-left sub-tree", result);
+			var expected = readSample(MethodBase.GetCurrentMethod().Name);
+			Assert.Equal(expected, result);
+		}
+
+
+		private string readSample(string name)
+		{
+			var assembly = Assembly.GetExecutingAssembly();
+			var resourceName = this.GetType().Namespace + "." + name + ".txt";
+
+			using (var stream = assembly.GetManifestResourceStream(resourceName))
+			using (var reader = new StreamReader(stream))
+			{
+				return reader.ReadToEnd();
+			}
+		}
+	}
 }

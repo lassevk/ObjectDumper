@@ -5,3 +5,4 @@ glob:*.suo
 glob:*.[Cc]ache
 glob:*.user
 glob:packages
+glob:build

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace ObjectDumper.Tests
 {
+    public class EmptyClass { }
 
-	public class TwoProperties
+    public class TwoProperties
 	{
 		public string Property1 { get; set; }
 		public int Property2 { get; set; }

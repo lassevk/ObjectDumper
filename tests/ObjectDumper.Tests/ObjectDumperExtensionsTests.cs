@@ -9,7 +9,7 @@ using Xunit;
 
 namespace ObjectDumper.Tests
 {
-
+   
     public class ObjectDumperExtensionsTests
     {
 
@@ -76,7 +76,14 @@ namespace ObjectDumper.Tests
             obj.Dump("action");
         }
 
-		[Fact]
+        [Fact]
+        public void DumpToString_emptyClass()
+        {
+            var result = ObjectDumperExtensions.DumpToString(new EmptyClass(), "emptyClassInstance");
+            Assert.Equal("#1: emptyClassInstance [ObjectDumper.Tests.EmptyClass]"+Environment.NewLine, result);
+        }
+
+        [Fact]
 		public void DumpToString_innerException()
 		{
 			try

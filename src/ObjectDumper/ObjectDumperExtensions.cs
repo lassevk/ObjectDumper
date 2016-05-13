@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace ObjectDumper
@@ -149,12 +146,19 @@ namespace ObjectDumper
         /// </exception>
         public static T Dump<T>(this T value, string name, TextWriter writer)
         {
+            return Dump(value, name, writer, DumpOptions.Default);
+        }
+
+        public static T Dump<T>(this T value, string name, TextWriter writer, DumpOptions options)
+        {
             if (StringEx.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");
             if (writer == null)
                 throw new ArgumentNullException("writer");
+            if (options == null)
+                throw new ArgumentNullException("options");
 
-            Dumper.Dump(value, name, writer);
+            Dumper.Dump(value, name, writer, options);
 
             return value;
         }
@@ -181,11 +185,16 @@ namespace ObjectDumper
         /// </exception>
         public static string DumpToString<T>(this T value, string name)
         {
+            return DumpToString(value, name, DumpOptions.Default);
+        }
+
+        public static string DumpToString<T>(this T value, string name, DumpOptions options)
+        {
             // Error-checking in called method
 
             using (var writer = new StringWriter(CultureInfo.InvariantCulture))
             {
-                Dump(value, name, writer);
+                Dump(value, name, writer, options);
                 return writer.ToString();
             }
         }

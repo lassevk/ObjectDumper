@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="DebugWriter.cs" />
     <Compile Include="Dumper.cs" />
+    <Compile Include="DumpOptions.cs" />
     <Compile Include="ObjectDumperExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringEx.cs" />

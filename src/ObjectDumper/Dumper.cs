@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Remoting;
+using System.Collections.Generic;
 
 namespace ObjectDumper
 {
@@ -33,16 +34,23 @@ namespace ObjectDumper
         /// </exception>
         public static void Dump(object value, string name, TextWriter writer)
         {
+            Dump(value, name, writer, DumpOptions.Default);
+        }
+
+        public static void Dump(object value, string name, TextWriter writer, DumpOptions options)
+        {
             if (StringEx.IsNullOrWhiteSpace(name))
                 throw new ArgumentNullException("name");
             if (writer == null)
                 throw new ArgumentNullException("writer");
+            if (options == null)
+                throw new ArgumentNullException("options");
 
             var idGenerator = new ObjectIDGenerator();
-            InternalDump(0, name, value, writer, idGenerator, true);
+            InternalDump(0, name, value, writer, idGenerator, true, options);
         }
 
-        private static void InternalDump(int indentationLevel, string name, object value, TextWriter writer, ObjectIDGenerator idGenerator, bool recursiveDump)
+        private static void InternalDump(int indentationLevel, string name, object value, TextWriter writer, ObjectIDGenerator idGenerator,bool recursiveDump, DumpOptions options)
         {
             var indentation = new string(' ', indentationLevel * 3);
 
@@ -127,13 +135,13 @@ namespace ObjectDumper
                  where property.GetIndexParameters().Length == 0
                        && property.CanRead
                  select property).ToArray();
-            FieldInfo[] fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).ToArray();
+            IEnumerable<FieldInfo> fields = options.NoFields ? Enumerable.Empty<FieldInfo>() : type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
-            if (properties.Length == 0 && fields.Length == 0)
+            if (!properties.Any() && !fields.Any())
                 return;
 
             writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}{{", indentation));
-            if (properties.Length > 0)
+            if (properties.Any())
             {
                 writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}   properties {{", indentation));
                 foreach (PropertyInfo pi in properties)
@@ -141,24 +149,24 @@ namespace ObjectDumper
                     try
                     {
                         object propertyValue = pi.GetValue(value, null);
-                        InternalDump(indentationLevel + 2, pi.Name, propertyValue, writer, idGenerator, true);
+                        InternalDump(indentationLevel + 2, pi.Name, propertyValue, writer, idGenerator, true, options);
                     }
                     catch (TargetInvocationException ex)
                     {
-                        InternalDump(indentationLevel + 2, pi.Name, ex, writer, idGenerator, false);
+                        InternalDump(indentationLevel + 2, pi.Name, ex, writer, idGenerator, false, options);
                     }
                     catch (ArgumentException ex)
                     {
-                        InternalDump(indentationLevel + 2, pi.Name, ex, writer, idGenerator, false);
+                        InternalDump(indentationLevel + 2, pi.Name, ex, writer, idGenerator, false, options);
                     }
                     catch (RemotingException ex)
                     {
-                        InternalDump(indentationLevel + 2, pi.Name, ex, writer, idGenerator, false);
+                        InternalDump(indentationLevel + 2, pi.Name, ex, writer, idGenerator, false, options);
                     }
                 }
                 writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}   }}", indentation));
             }
-            if (fields.Length > 0)
+            if (fields.Any())
             {
                 writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}   fields {{", indentation));
                 foreach (FieldInfo field in fields)
@@ -166,11 +174,11 @@ namespace ObjectDumper
                     try
                     {
                         object fieldValue = field.GetValue(value);
-                        InternalDump(indentationLevel + 2, field.Name, fieldValue, writer, idGenerator, true);
+                        InternalDump(indentationLevel + 2, field.Name, fieldValue, writer, idGenerator, true, options);
                     }
                     catch (TargetInvocationException ex)
                     {
-                        InternalDump(indentationLevel + 2, field.Name, ex, writer, idGenerator, false);
+                        InternalDump(indentationLevel + 2, field.Name, ex, writer, idGenerator, false, options);
                     }
                 }
                 writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}   }}", indentation));

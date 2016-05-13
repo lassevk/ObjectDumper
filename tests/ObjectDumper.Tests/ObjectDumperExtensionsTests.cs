@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using Xunit;
 
 namespace ObjectDumper.Tests
@@ -77,6 +78,15 @@ namespace ObjectDumper.Tests
         }
 
         [Fact]
+        public void DumpToString_noFields()
+        {
+            var result = ObjectDumperExtensions.DumpToString(Node.Root, "root", new DumpOptions { NoFields = true });
+            var matches = Regex.Matches(result, @"left-left");
+            Assert.Equal(1, matches.Count);
+            Assert.DoesNotContain("fields", result);
+        }
+
+        [Fact]
         public void DumpToString_emptyClass()
         {
             var result = ObjectDumperExtensions.DumpToString(new EmptyClass(), "emptyClassInstance");
@@ -121,6 +131,7 @@ namespace ObjectDumper.Tests
 			Assert.Contains("left-left sub-tree", result);
 			var expected = readSample(MethodBase.GetCurrentMethod().Name);
 			Assert.Equal(expected, result);
+            Assert.Contains("fields", result);
 		}
 
 

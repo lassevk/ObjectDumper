@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -47,6 +48,9 @@ namespace ObjectDumper
                 throw new ArgumentNullException("options");
 
             var idGenerator = new ObjectIDGenerator();
+
+            writer.WriteLine(value.GetType().FullName);
+
             InternalDump(0, name, value, writer, idGenerator, true, options);
         }
 
@@ -96,17 +100,18 @@ namespace ObjectDumper
                 formattedValue = formattedValue.Replace("\t", "\\t").Replace("\n", "\\n").Replace("\r", "\\r");
 
                 // chop at 80 characters
-                int length = formattedValue.Length;
-                if (length > 80)
-                    formattedValue = formattedValue.Substring(0, 80);
+                //int length = formattedValue.Length;
+                //if (length > 80)
+                //    formattedValue = formattedValue.Substring(0, 80);
                 if (isString)
                     formattedValue = string.Format(CultureInfo.InvariantCulture, "\"{0}\"", formattedValue);
-                if (length > 80)
-                    formattedValue += " (+" + (length - 80) + " chars)";
+                //if (length > 80)
+                //    formattedValue += " (+" + (length - 80) + " chars)";
                 formattedValue = " = " + formattedValue;
             }
 
-            writer.WriteLine("{0}{1}{2}{3} [{4}]{5}", indentation, keyPrefix, name, formattedValue, value.GetType(), keyRef);
+            //writer.WriteLine("{0}{1}{2}{3} [{4}]{5}", indentation, keyPrefix, name, formattedValue, value.GetType(), keyRef);
+            writer.WriteLine("{0}{1}{2}{3} [{4}]", indentation, keyPrefix, name, formattedValue, keyRef);
 
             // Avoid dumping objects we've already dumped, or is already in the process of dumping
             if (keyRef.Length > 0)
@@ -183,6 +188,26 @@ namespace ObjectDumper
                 }
                 writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}   }}", indentation));
             }
+
+            if (value is IEnumerable)
+            {
+                writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}   collections {{", indentation));
+
+                foreach (var collectionItem in value as IEnumerable)
+                {
+                    try
+                    {
+                        object fieldValue = collectionItem;
+                        InternalDump(indentationLevel + 2, "collectionItem", fieldValue, writer, idGenerator, true, options);
+                    }
+                    catch (TargetInvocationException ex)
+                    {
+                        InternalDump(indentationLevel + 2, "collectionItem", ex, writer, idGenerator, false, options);
+                    }
+                }
+            }
+
+
             writer.WriteLine(string.Format(CultureInfo.InvariantCulture, "{0}}}", indentation));
         }
     }

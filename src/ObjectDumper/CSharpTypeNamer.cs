@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 using JetBrains.Annotations;
 
@@ -29,6 +31,15 @@ namespace ObjectDumper
         {
             if (_KnownTypes.TryGetValue(type, out string knownName))
                 return knownName;
+
+            if (type.IsGenericType)
+            {
+                string name = type.FullName;
+                name = name.Substring(0, name.IndexOf("`"));
+
+                name = name + "<" + string.Join(",", type.GetGenericArguments().Select(t => GetNameOfType(t))) + ">";
+                return name;
+            }
 
             return type.FullName;
         }

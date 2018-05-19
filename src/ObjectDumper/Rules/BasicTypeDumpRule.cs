@@ -12,7 +12,21 @@ namespace ObjectDumper.Rules
             if (value == null)
                 return false;
 
-            string typeSuffix = $" [{dumper.GetNameOfType(value.GetType())}]";
+            string getTypeSuffix()
+            {
+                var type = value.GetType();
+
+                string typeSuffix = $" [{dumper.GetNameOfType(type)}]";
+
+                if (type.IsClass)
+                {
+                    int id = dumper.GetId(value, out _);
+                    typeSuffix += $" #{id}";
+                }
+
+                return typeSuffix;
+            }
+
             switch (value)
             {
                 case short s:
@@ -24,12 +38,12 @@ namespace ObjectDumper.Rules
                 case int i:
                 case uint ui:
                 case decimal de:
-                    dumper.WriteLine(((IFormattable)value).ToString("G", CultureInfo.InvariantCulture) + typeSuffix);
+                    dumper.WriteLine(((IFormattable)value).ToString("G", CultureInfo.InvariantCulture) + getTypeSuffix());
                     return true;
 
                 case double d:
                 case float f:
-                    dumper.WriteLine(((IFormattable)value).ToString("R19", CultureInfo.InvariantCulture) + typeSuffix);
+                    dumper.WriteLine(((IFormattable)value).ToString("R19", CultureInfo.InvariantCulture) + getTypeSuffix());
                     return true;
 
                 default:

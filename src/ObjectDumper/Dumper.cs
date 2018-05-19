@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 using JetBrains.Annotations;
 
@@ -17,6 +18,8 @@ namespace ObjectDumper
         public Dumper()
         {
             Rules.Add(new NullDumpRule().WithWeight(int.MaxValue));
+            // Rules.Add(new ExceptionDumpRule().WithWeight(100));
+            Rules.Add(new ReflectionDumpRule().WithWeight(100));
             Rules.Add(new BasicTypeDumpRule().WithWeight(100));
             Rules.Add(new StringDumpRule().WithWeight(100));
             Rules.Add(new EnumerableDumpRule().WithWeight(100));

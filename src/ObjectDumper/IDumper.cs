@@ -11,6 +11,7 @@ namespace ObjectDumper
     {
         void Dump([CanBeNull] object value, [CanBeNull] string name = null);
         void WriteLine([CanBeNull] string line);
+        bool WriteTypeLine(object value);
     }
 
     internal class InternalDumper : IDumper
@@ -84,6 +85,15 @@ namespace ObjectDumper
             }
 
             _Writer.WriteLine($"{_Indent}{line}");
+        }
+
+        public bool WriteTypeLine(object value)
+        {
+            string typeName = GetNameOfType(value.GetType());
+            int id = GetId(value, out bool isFirstOccurrence);
+
+            WriteLine($"[{typeName}] #{id}{(isFirstOccurrence ? " - already dumped" : "")}");
+            return isFirstOccurrence;
         }
 
         public int GetId(object instance, out bool isFirstOccurrence)

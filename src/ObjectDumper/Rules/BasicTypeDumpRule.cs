@@ -29,6 +29,13 @@ namespace ObjectDumper.Rules
 
             switch (value)
             {
+                case IntPtr ptr:
+                    if (IntPtr.Size == 8)
+                        dumper.WriteLine($"0x{ptr:X16}" + getTypeSuffix());
+                    else
+                        dumper.WriteLine($"0x{ptr:X8}" + getTypeSuffix());
+                    return true;
+
                 case short s:
                 case ushort us:
                 case byte b:
